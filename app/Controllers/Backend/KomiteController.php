@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\Komite;
@@ -23,7 +23,7 @@ class KomiteController extends Controller
         }
         Komite::create($input);
         Cache::forget("komite_all");
-        return redirect("admin.komite.index")->with("success", "Data komite berhasil ditambahkan");
+        redirect('/admin/komite')->with("success", "Data komite berhasil ditambahkan");
     }
     public function edit($id) {
         $data = Komite::findOrFail($id);
@@ -38,13 +38,15 @@ class KomiteController extends Controller
         }
         $model->update($input);
         Cache::forget("komite_all");
-        return redirect("admin.komite.index")->with("success", "Data komite berhasil diubah");
+        redirect('/admin/komite')->with("success", "Data komite berhasil diubah");
     }
     public function destroy($id) {
         $model = Komite::findOrFail($id);
         if ($model->foto) Storage::disk("public")->delete($model->foto);
         $model->delete();
         Cache::forget("komite_all");
-        return redirect("admin.komite.index")->with("success", "Data komite berhasil dihapus");
+        redirect('/admin/komite')->with("success", "Data komite berhasil dihapus");
     }
 }
+
+

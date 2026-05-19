@@ -7,7 +7,6 @@ use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Core\Request;
 use App\Core\Auth;
-use App\Core\Auth;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller

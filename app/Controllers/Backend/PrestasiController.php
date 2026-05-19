@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\Prestasi;
@@ -23,7 +23,7 @@ class PrestasiController extends Controller
         if ($request->hasFile("foto")) { $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         \App\Models\Prestasi::create($input);
         Cache::forget("prestasi_all");
-        return redirect("admin.prestasi.index")->with("success", "Data berhasil ditambahkan");
+        redirect('/admin/prestasi')->with("success", "Data berhasil ditambahkan");
     }
     public function edit($id) {
         $data = \App\Models\Prestasi::findOrFail($id);
@@ -36,13 +36,15 @@ class PrestasiController extends Controller
         if ($request->hasFile("foto")) { if ($model->foto) Storage::disk("public")->delete($model->foto); $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         $model->update($input);
         Cache::forget("prestasi_all");
-        return redirect("admin.prestasi.index")->with("success", "Data berhasil diubah");
+        redirect('/admin/prestasi')->with("success", "Data berhasil diubah");
     }
     public function destroy($id) {
         $model = \App\Models\Prestasi::findOrFail($id);
         if ($model->foto) Storage::disk("public")->delete($model->foto);
         $model->delete();
         Cache::forget("prestasi_all");
-        return redirect("admin.prestasi.index")->with("success", "Data berhasil dihapus");
+        redirect('/admin/prestasi')->with("success", "Data berhasil dihapus");
     }
 }
+
+

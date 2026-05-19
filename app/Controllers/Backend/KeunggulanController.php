@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Models\KeunggulanSekolah;
 use App\Core\Request;
 use App\Core\Auth;
@@ -37,7 +37,7 @@ class KeunggulanController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
-        return redirect('admin.keunggulan.index')
+        redirect('/admin/keunggulan')
             ->with('success', 'Data keunggulan berhasil ditambahkan!');
     }
 
@@ -63,14 +63,16 @@ class KeunggulanController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
-        return redirect('admin.keunggulan.index')
+        redirect('/admin/keunggulan')
             ->with('success', 'Data keunggulan berhasil diperbarui!');
     }
 
     public function destroy(KeunggulanSekolah $keunggulan)
     {
         $keunggulan->delete();
-        return redirect('admin.keunggulan.index')
+        redirect('/admin/keunggulan')
             ->with('success', 'Data keunggulan berhasil dihapus!');
     }
 }
+
+

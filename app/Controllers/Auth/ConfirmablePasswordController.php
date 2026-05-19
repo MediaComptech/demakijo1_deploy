@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Core\Request;
 use App\Core\Auth;
-use App\Core\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 

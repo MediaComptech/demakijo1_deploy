@@ -1,14 +1,20 @@
 <?php
 namespace App\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
+
     public function index()
     {
         $data = User::latest()->get();
@@ -23,18 +29,19 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:5'
+            'name'     => 'required',
+            'email'    => 'required|email',
+            'password' => 'required',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+        User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
             'password' => Hash::make($request->password),
+            'role'     => $request->role ?? 'admin',
         ]);
 
-        return redirect('admin.user.index')->with('success', 'User berhasil ditambahkan');
+        redirect('/admin/user')->with('success', 'User berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -45,25 +52,24 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
-        ]);
+        $user  = User::findOrFail($id);
+        $input = $request->except('_token', '_method', 'password');
 
-        $input = $request->except('password');
-        if($request->filled('password')) {
+        if ($request->filled('password')) {
             $input['password'] = Hash::make($request->password);
         }
 
         $user->update($input);
-        return redirect('admin.user.index')->with('success', 'User berhasil diubah');
+        redirect('/admin/user')->with('success', 'User berhasil diubah');
     }
 
     public function destroy($id)
     {
-        if($id == 1) return redirect()->back()->with('error', 'Super Admin tidak bisa dihapus!');
+        if ($id == 1) {
+            redirect('/admin/user')->with('error', 'Super Admin tidak bisa dihapus!');
+            return;
+        }
         User::findOrFail($id)->delete();
-        return redirect('admin.user.index')->with('success', 'User berhasil dihapus');
+        redirect('/admin/user')->with('success', 'User berhasil dihapus');
     }
 }

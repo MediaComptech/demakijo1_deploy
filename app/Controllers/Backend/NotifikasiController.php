@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 
@@ -34,3 +34,5 @@ class NotifikasiController extends Controller
         return redirect()->back()->with("success", "Notifikasi berhasil dikirim!");
     }
 }
+
+

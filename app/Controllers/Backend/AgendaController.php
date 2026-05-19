@@ -1,48 +1,65 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\Agenda;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 
 class AgendaController extends Controller
 {
-    public function index() {
-        $data = \App\Models\Agenda::latest()->get();
-        return view("backend." . strtolower(preg_replace("/(?<!^)[A-Z]/", "_$0", "Agenda")) . ".index", compact("data"));
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
     }
-    public function create() {
-        return view("backend." . strtolower(preg_replace("/(?<!^)[A-Z]/", "_$0", "Agenda")) . ".create");
+
+    public function index()
+    {
+        $data = Agenda::latest()->get();
+        return view('backend.agenda.index', compact('data'));
     }
-    public function store(Request $request) {
-        $input = $request->except("_token");
-        $input["slug"] = Str::slug($request->judul ?? $request->nama ?? $request->judul ?? time());
-        
-        \App\Models\Agenda::create($input);
-        Cache::forget("agenda_all");
-        return redirect("admin.agenda.index")->with("success", "Data berhasil ditambahkan");
+
+    public function create()
+    {
+        return view('backend.agenda.create');
     }
-    public function edit($id) {
-        $data = \App\Models\Agenda::findOrFail($id);
-        return view("backend." . strtolower(preg_replace("/(?<!^)[A-Z]/", "_$0", "Agenda")) . ".edit", compact("data"));
+
+    public function store(Request $request)
+    {
+        $input = $request->except('_token');
+        if (empty($input['slug'])) {
+            $input['slug'] = Str::slug($request->judul ?? $request->nama ?? time());
+        }
+        Agenda::create($input);
+        Cache::forget('agenda_all');
+        redirect('/admin/agenda')->with('success', 'Agenda berhasil ditambahkan');
     }
-    public function update(Request $request, $id) {
-        $model = \App\Models\Agenda::findOrFail($id);
-        $input = $request->except("_token", "_method");
-        $input["slug"] = Str::slug($request->judul ?? $request->nama ?? $request->judul ?? time());
-        
+
+    public function edit($id)
+    {
+        $data = Agenda::findOrFail($id);
+        return view('backend.agenda.edit', compact('data'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $model = Agenda::findOrFail($id);
+        $input = $request->except('_token', '_method');
+        if (empty($input['slug'])) {
+            $input['slug'] = Str::slug($request->judul ?? $request->nama ?? time());
+        }
         $model->update($input);
-        Cache::forget("agenda_all");
-        return redirect("admin.agenda.index")->with("success", "Data berhasil diubah");
+        Cache::forget('agenda_all');
+        redirect('/admin/agenda')->with('success', 'Agenda berhasil diubah');
     }
-    public function destroy($id) {
-        $model = \App\Models\Agenda::findOrFail($id);
-        
-        $model->delete();
-        Cache::forget("agenda_all");
-        return redirect("admin.agenda.index")->with("success", "Data berhasil dihapus");
+
+    public function destroy($id)
+    {
+        Agenda::findOrFail($id)->delete();
+        Cache::forget('agenda_all');
+        redirect('/admin/agenda')->with('success', 'Agenda berhasil dihapus');
     }
 }

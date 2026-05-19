@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\KategoriBerita;
@@ -22,7 +22,7 @@ class KategoriBeritaController extends Controller
             "slug" => Str::slug($request->nama),
             "deskripsi" => $request->deskripsi,
         ]);
-        return redirect("admin.kategori-berita.index")->with("success", "Kategori berhasil ditambahkan!");
+        redirect('/admin/kategori-berita')->with("success", "Kategori berhasil ditambahkan!");
     }
     public function edit($id) {
         $data = KategoriBerita::findOrFail($id);
@@ -36,10 +36,12 @@ class KategoriBeritaController extends Controller
             "slug" => Str::slug($request->nama),
             "deskripsi" => $request->deskripsi,
         ]);
-        return redirect("admin.kategori-berita.index")->with("success", "Kategori berhasil diubah!");
+        redirect('/admin/kategori-berita')->with("success", "Kategori berhasil diubah!");
     }
     public function destroy($id) {
         KategoriBerita::findOrFail($id)->delete();
-        return redirect("admin.kategori-berita.index")->with("success", "Kategori berhasil dihapus!");
+        redirect('/admin/kategori-berita')->with("success", "Kategori berhasil dihapus!");
     }
 }
+
+

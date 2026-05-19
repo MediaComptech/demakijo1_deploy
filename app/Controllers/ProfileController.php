@@ -2,60 +2,42 @@
 
 namespace App\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
-use App\Core\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function __construct()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
     }
 
-    /**
-     * Update the user's profile information.
-     */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function edit(Request $request)
     {
-        $request->user()->fill($request->validated());
+        $user = Auth::user();
+        return $this->view('profile.edit', ['user' => $user]);
+    }
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+    public function update(Request $request)
+    {
+        $user  = Auth::user();
+        $input = $request->except('_token', '_method', 'password');
+        if ($request->filled('password')) {
+            $input['password'] = Hash::make($request->password);
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        User::find($user->id)->update($input);
+        redirect('/profile/edit')->with('success', 'Profil berhasil diperbarui!');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-
+        $user = Auth::user();
         Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        User::find($user->id)->delete();
+        redirect('/');
     }
 }

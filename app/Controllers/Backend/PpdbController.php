@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\Ppdb;
@@ -31,7 +31,7 @@ class PpdbController extends Controller
             }
         }
         Ppdb::create($input);
-        return redirect('admin.ppdb.index')->with('success', 'Data pendaftar berhasil ditambahkan');
+        redirect('/admin/ppdb')->with('success', 'Data pendaftar berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -53,7 +53,7 @@ class PpdbController extends Controller
             }
         }
         $model->update($input);
-        return redirect('admin.ppdb.index')->with('success', 'Data pendaftar berhasil diubah');
+        redirect('/admin/ppdb')->with('success', 'Data pendaftar berhasil diubah');
     }
 
     public function destroy($id)
@@ -63,6 +63,8 @@ class PpdbController extends Controller
             if ($model->$f) Storage::disk('public')->delete($model->$f);
         }
         $model->delete();
-        return redirect('admin.ppdb.index')->with('success', 'Data pendaftar berhasil dihapus');
+        redirect('/admin/ppdb')->with('success', 'Data pendaftar berhasil dihapus');
     }
 }
+
+

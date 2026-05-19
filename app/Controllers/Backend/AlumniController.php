@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\Alumni;
@@ -24,7 +24,7 @@ class AlumniController extends Controller
         }
         Alumni::create($input);
         Cache::forget("alumni_verified");
-        return redirect("admin.alumni.index")->with("success", "Alumni berhasil ditambahkan");
+        redirect('/admin/alumni')->with("success", "Alumni berhasil ditambahkan");
     }
     public function edit($id) {
         $data = Alumni::findOrFail($id);
@@ -40,13 +40,15 @@ class AlumniController extends Controller
         }
         $model->update($input);
         Cache::forget("alumni_verified");
-        return redirect("admin.alumni.index")->with("success", "Alumni berhasil diubah");
+        redirect('/admin/alumni')->with("success", "Alumni berhasil diubah");
     }
     public function destroy($id) {
         $model = Alumni::findOrFail($id);
         if ($model->foto) Storage::disk("public")->delete($model->foto);
         $model->delete();
         Cache::forget("alumni_verified");
-        return redirect("admin.alumni.index")->with("success", "Alumni berhasil dihapus");
+        redirect('/admin/alumni')->with("success", "Alumni berhasil dihapus");
     }
 }
+
+

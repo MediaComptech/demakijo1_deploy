@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\Ekstrakurikuler;
@@ -23,7 +23,7 @@ class EkstrakurikulerController extends Controller
         if ($request->hasFile("foto")) { $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         \App\Models\Ekstrakurikuler::create($input);
         Cache::forget("ekstra_all");
-        return redirect("admin.ekstrakurikuler.index")->with("success", "Data berhasil ditambahkan");
+        redirect('/admin/ekstrakurikuler')->with("success", "Data berhasil ditambahkan");
     }
     public function edit($id) {
         $data = \App\Models\Ekstrakurikuler::findOrFail($id);
@@ -36,13 +36,15 @@ class EkstrakurikulerController extends Controller
         if ($request->hasFile("foto")) { if ($model->foto) Storage::disk("public")->delete($model->foto); $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         $model->update($input);
         Cache::forget("ekstra_all");
-        return redirect("admin.ekstrakurikuler.index")->with("success", "Data berhasil diubah");
+        redirect('/admin/ekstrakurikuler')->with("success", "Data berhasil diubah");
     }
     public function destroy($id) {
         $model = \App\Models\Ekstrakurikuler::findOrFail($id);
         if ($model->foto) Storage::disk("public")->delete($model->foto);
         $model->delete();
         Cache::forget("ekstra_all");
-        return redirect("admin.ekstrakurikuler.index")->with("success", "Data berhasil dihapus");
+        redirect('/admin/ekstrakurikuler')->with("success", "Data berhasil dihapus");
     }
 }
+
+

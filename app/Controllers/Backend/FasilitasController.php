@@ -1,6 +1,6 @@
 <?php
 namespace App\Controllers\Backend;
-use App\Http\Controllers\Controller;
+use App\Core\Controller;
 use App\Core\Request;
 use App\Core\Auth;
 use App\Models\Fasilitas;
@@ -23,7 +23,7 @@ class FasilitasController extends Controller
         if ($request->hasFile("foto")) { $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         \App\Models\Fasilitas::create($input);
         Cache::forget("fasilitas_all");
-        return redirect("admin.fasilitas.index")->with("success", "Data berhasil ditambahkan");
+        redirect('/admin/fasilitas')->with("success", "Data berhasil ditambahkan");
     }
     public function edit($id) {
         $data = \App\Models\Fasilitas::findOrFail($id);
@@ -36,13 +36,15 @@ class FasilitasController extends Controller
         if ($request->hasFile("foto")) { if ($model->foto) Storage::disk("public")->delete($model->foto); $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         $model->update($input);
         Cache::forget("fasilitas_all");
-        return redirect("admin.fasilitas.index")->with("success", "Data berhasil diubah");
+        redirect('/admin/fasilitas')->with("success", "Data berhasil diubah");
     }
     public function destroy($id) {
         $model = \App\Models\Fasilitas::findOrFail($id);
         if ($model->foto) Storage::disk("public")->delete($model->foto);
         $model->delete();
         Cache::forget("fasilitas_all");
-        return redirect("admin.fasilitas.index")->with("success", "Data berhasil dihapus");
+        redirect('/admin/fasilitas')->with("success", "Data berhasil dihapus");
     }
 }
+
+

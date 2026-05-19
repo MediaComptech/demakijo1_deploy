@@ -55,12 +55,12 @@
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF" class="rounded-circle shadow" alt="User Image">
                             <p>
                                 {{ Auth::user()->name }}
-                                <small>Role: {{ Auth::user()->roles->pluck('name')->join(', ') }}</small>
+                                <small>Role: {{ Auth::user()->role ?? 'Admin' }}</small>
                             </p>
                         </li>
                         <li class="user-footer">
                             <a href="#" class="btn btn-default btn-flat">Profile</a>
-                            <form method="POST" action="{{ url('logout') }}" class="d-inline">
+                            <form method="POST" action="{{ url('/logout') }}" class="d-inline">
                                 {!! csrf_field() !!}
                                 <button type="submit" class="btn btn-default btn-flat float-end">Sign out</button>
                             </form>
@@ -75,7 +75,7 @@
     <!-- Main Sidebar Container -->
     <aside class="app-sidebar shadow" data-bs-theme="dark" style="background-color: #003366;">
         <!-- Brand Logo -->
-        <a href="{{ url('dashboard') }}" class="brand-link text-center">
+        <a href="{{ url('/dashboard') }}" class="brand-link text-center">
             <span class="brand-text font-weight-light fw-bold text-white">SDN DEMAKIJO 1</span>
         </a>
 
@@ -84,7 +84,7 @@
             <nav class="mt-2">
                 <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
                     <li class="nav-item">
-                        <a href="{{ url('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <a href="{{ url('/dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
                             <p>Dashboard</p>
                         </a>
@@ -98,12 +98,12 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{ url('admin.berita.index') }}" class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                                <a href="{{ url('/admin/berita') }}" class="nav-link {{ request()->is('admin/berita*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i><p>Daftar Berita</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ url('admin.kategori-berita.index') }}" class="nav-link {{ request()->routeIs('admin.kategori-berita.*') ? 'active' : '' }}">
+                                <a href="{{ url('/admin/kategori-berita') }}" class="nav-link {{ request()->is('admin/kategori-berita*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i><p>Kategori</p>
                                 </a>
                             </li>
@@ -116,25 +116,25 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{ url('admin.galeri.index') }}" class="nav-link">
+                                <a href="{{ url('/admin/galeri') }}" class="nav-link {{ request()->is('admin/galeri*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i><p>Daftar Galeri</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ url('admin.album.index') }}" class="nav-link">
+                                <a href="{{ url('/admin/album') }}" class="nav-link {{ request()->is('admin/album*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i><p>Album</p>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.pengumuman.index') }}" class="nav-link">
+                        <a href="{{ url('/admin/pengumuman') }}" class="nav-link {{ request()->is('admin/pengumuman*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-bullhorn"></i>
                             <p>Pengumuman</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.agenda.index') }}" class="nav-link">
+                        <a href="{{ url('/admin/agenda') }}" class="nav-link {{ request()->is('admin/agenda*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-calendar-alt"></i>
                             <p>Agenda</p>
                         </a>
@@ -142,31 +142,31 @@
 
                     <li class="nav-header">MANAJEMEN SEKOLAH</li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.guru.index') }}" class="nav-link">
+                        <a href="{{ url('/admin/guru') }}" class="nav-link {{ request()->is('admin/guru*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-chalkboard-teacher"></i>
                             <p>Data Guru</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.siswa.index') }}" class="nav-link">
+                        <a href="{{ url('/admin/siswa') }}" class="nav-link {{ request()->is('admin/siswa*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-user-graduate"></i>
                             <p>Data Siswa</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.prestasi.index') }}" class="nav-link {{ request()->routeIs('admin.prestasi.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/prestasi') }}" class="nav-link {{ request()->is('admin/prestasi*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-trophy"></i>
                             <p>Prestasi</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.komite.index') }}" class="nav-link {{ request()->routeIs('admin.komite.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/komite') }}" class="nav-link {{ request()->is('admin/komite*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>Komite Sekolah</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.alumni.index') }}" class="nav-link {{ request()->routeIs('admin.alumni.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/alumni') }}" class="nav-link {{ request()->is('admin/alumni*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-user-graduate"></i>
                             <p>Alumni
                             @php $unv = \App\Models\Alumni::where('is_verified', false)->count(); @endphp
@@ -177,19 +177,19 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.fasilitas.index') }}" class="nav-link {{ request()->routeIs('admin.fasilitas.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/fasilitas') }}" class="nav-link {{ request()->is('admin/fasilitas*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-building"></i>
                             <p>Fasilitas</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.keunggulan.index') }}" class="nav-link {{ request()->routeIs('admin.keunggulan.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/keunggulan') }}" class="nav-link {{ request()->is('admin/keunggulan*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-star"></i>
                             <p>Kenapa Memilih Kami</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.ekstrakurikuler.index') }}" class="nav-link {{ request()->routeIs('admin.ekstrakurikuler.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/ekstrakurikuler') }}" class="nav-link {{ request()->is('admin/ekstrakurikuler*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-futbol"></i>
                             <p>Ekstrakurikuler</p>
                         </a>
@@ -197,25 +197,25 @@
 
                     <li class="nav-header">SISTEM</li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.ppdb.index') }}" class="nav-link">
+                        <a href="{{ url('/admin/ppdb') }}" class="nav-link {{ request()->is('admin/ppdb*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-user-plus"></i>
                             <p>PPDB Online</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.notifikasi.index') }}" class="nav-link {{ request()->routeIs('admin.notifikasi.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/notifikasi') }}" class="nav-link {{ request()->is('admin/notifikasi*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-bell"></i>
                             <p>Push Notifications</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.user.index') }}" class="nav-link {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/user') }}" class="nav-link {{ request()->is('admin/user*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users-cog"></i>
                             <p>Manajemen Pengguna</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('admin.pengaturan.index') }}" class="nav-link {{ request()->routeIs('admin.pengaturan.*') ? 'active' : '' }}">
+                        <a href="{{ url('/admin/pengaturan') }}" class="nav-link {{ request()->is('admin/pengaturan*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-cogs"></i>
                             <p>Pengaturan Website</p>
                         </a>
