@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title><?php echo $this->yieldContent('title', 'Dashboard'); ?> | Admin SDN Demakijo 1</title>
+
+ <!-- Google Font: Source Sans Pro -->
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+ <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <!-- AdminLTE v4 (Bootstrap 5) CSS -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-alpha2/dist/css/adminlte.min.css">
+ 
+ <?php echo  $this->CompileStackFinal('styles'); ?>
+ 
+ <style>
+ .sidebar-dark-primary {
+ background-color: #003366 !important; /* Biru korporat sekolah */
+ }
+ .brand-link {
+ border-bottom: 1px solid #ffcc00 !important; /* Kuning sekolah */
+ }
+ .nav-sidebar .nav-item > .nav-link.active {
+ background-color: #ffcc00 !important;
+ color: #003366 !important;
+ font-weight: bold;
+ }
+ </style>
+</head>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+<div class="app-wrapper">
+ <!-- Navbar -->
+ <nav class="app-header navbar navbar-expand bg-body">
+ <div class="container-fluid">
+ <!-- Left navbar links -->
+ <ul class="navbar-nav">
+ <li class="nav-item">
+ <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button"><i class="fas fa-bars"></i></a>
+ </li>
+ <li class="nav-item d-none d-md-block">
+ <a href="/" class="nav-link" target="_blank">Lihat Website</a>
+ </li>
+ </ul>
+
+ <!-- Right navbar links -->
+ <ul class="navbar-nav ms-auto">
+ <li class="nav-item dropdown user-menu">
+ <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+ <img src="https://ui-avatars.com/api/?name=<?php echo \htmlentities(urlencode(Auth::user()->name)??'', ENT_QUOTES, 'UTF-8', false); ?>&color=7F9CF5&background=EBF4FF" class="user-image rounded-circle shadow" alt="User Image">
+ <span class="d-none d-md-inline"><?php echo \htmlentities(Auth::user()->name??'', ENT_QUOTES, 'UTF-8', false); ?></span>
+ </a>
+ <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+ <li class="user-header text-bg-primary">
+ <img src="https://ui-avatars.com/api/?name=<?php echo \htmlentities(urlencode(Auth::user()->name)??'', ENT_QUOTES, 'UTF-8', false); ?>&color=7F9CF5&background=EBF4FF" class="rounded-circle shadow" alt="User Image">
+ <p>
+ <?php echo \htmlentities(Auth::user()->name??'', ENT_QUOTES, 'UTF-8', false); ?>
+
+ <small>Role: <?php echo \htmlentities(Auth::user()->role ?? 'Admin'??'', ENT_QUOTES, 'UTF-8', false); ?></small>
+ </p>
+ </li>
+ <li class="user-footer">
+ <a href="#" class="btn btn-default btn-flat">Profile</a>
+ <form method="POST" action="<?php echo \htmlentities(url('/logout')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="d-inline">
+ <?php echo csrf_field(); ?>
+
+ <button type="submit" class="btn btn-default btn-flat float-end">Sign out</button>
+ </form>
+ </li>
+ </ul>
+ </li>
+ </ul>
+ </div>
+ </nav>
+ <!-- /.navbar -->
+
+ <!-- Main Sidebar Container -->
+ <aside class="app-sidebar shadow" data-bs-theme="dark" style="background-color: #003366;">
+ <!-- Brand Logo -->
+ <a href="<?php echo \htmlentities(url('/dashboard')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="brand-link text-center">
+ <span class="brand-text font-weight-light fw-bold text-white">SDN DEMAKIJO 1</span>
+ </a>
+
+ <!-- Sidebar -->
+ <div class="sidebar-wrapper">
+ <nav class="mt-2">
+ <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/dashboard')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('dashboard') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-tachometer-alt"></i>
+ <p>Dashboard</p>
+ </a>
+ </li>
+
+ <li class="nav-header">KONTEN WEBSITE</li>
+ <li class="nav-item">
+ <a href="#" class="nav-link">
+ <i class="nav-icon fas fa-newspaper"></i>
+ <p>Berita & Artikel <i class="fas fa-angle-left right"></i></p>
+ </a>
+ <ul class="nav nav-treeview">
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/berita')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/berita*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="far fa-circle nav-icon"></i><p>Daftar Berita</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/kategori-berita')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/kategori-berita*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="far fa-circle nav-icon"></i><p>Kategori</p>
+ </a>
+ </li>
+ </ul>
+ </li>
+ <li class="nav-item">
+ <a href="#" class="nav-link">
+ <i class="nav-icon fas fa-images"></i>
+ <p>Galeri & Album <i class="fas fa-angle-left right"></i></p>
+ </a>
+ <ul class="nav nav-treeview">
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/galeri')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/galeri*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="far fa-circle nav-icon"></i><p>Daftar Galeri</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/album')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/album*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="far fa-circle nav-icon"></i><p>Album</p>
+ </a>
+ </li>
+ </ul>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/pengumuman')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/pengumuman*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-bullhorn"></i>
+ <p>Pengumuman</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/agenda')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/agenda*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-calendar-alt"></i>
+ <p>Agenda</p>
+ </a>
+ </li>
+
+ <li class="nav-header">MANAJEMEN SEKOLAH</li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/guru')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/guru*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-chalkboard-teacher"></i>
+ <p>Data Guru</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/siswa')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/siswa*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-user-graduate"></i>
+ <p>Data Siswa</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/prestasi')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/prestasi*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-trophy"></i>
+ <p>Prestasi</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/komite')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/komite*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-users"></i>
+ <p>Komite Sekolah</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/alumni')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/alumni*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-user-graduate"></i>
+ <p>Alumni
+ <?php $unv = \App\Models\Alumni::where('is_verified', false)->count();  ?>
+ <?php if($unv > 0): ?>
+ <span class="badge bg-danger ms-1"><?php echo \htmlentities($unv??'', ENT_QUOTES, 'UTF-8', false); ?></span>
+ <?php endif; ?>
+ </p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/fasilitas')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/fasilitas*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-building"></i>
+ <p>Fasilitas</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/keunggulan')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/keunggulan*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-star"></i>
+ <p>Kenapa Memilih Kami</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/ekstrakurikuler')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/ekstrakurikuler*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-futbol"></i>
+ <p>Ekstrakurikuler</p>
+ </a>
+ </li>
+
+ <li class="nav-header">SISTEM</li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/ppdb')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/ppdb*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-user-plus"></i>
+ <p>PPDB Online</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/notifikasi')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/notifikasi*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-bell"></i>
+ <p>Push Notifications</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/user')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/user*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-users-cog"></i>
+ <p>Manajemen Pengguna</p>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="<?php echo \htmlentities(url('/admin/pengaturan')??'', ENT_QUOTES, 'UTF-8', false); ?>" class="nav-link <?php echo \htmlentities(request()->is('admin/pengaturan*') ? 'active' : ''??'', ENT_QUOTES, 'UTF-8', false); ?>">
+ <i class="nav-icon fas fa-cogs"></i>
+ <p>Pengaturan Website</p>
+ </a>
+ </li>
+ </ul>
+ </nav>
+ </div>
+ <!-- /.sidebar -->
+ </aside>
+
+ <!-- Content Wrapper. Contains page content -->
+ <main class="app-main">
+ <!-- Content Header (Page header) -->
+ <div class="app-content-header">
+ <div class="container-fluid">
+ <div class="row">
+ <div class="col-sm-6">
+ <h3 class="mb-0"><?php echo $this->yieldContent('title'); ?></h3>
+ </div>
+ <div class="col-sm-6">
+ <ol class="breadcrumb float-sm-end">
+ <li class="breadcrumb-item"><a href="#">Home</a></li>
+ <li class="breadcrumb-item active" aria-current="page"><?php echo $this->yieldContent('title'); ?></li>
+ </ol>
+ </div>
+ </div>
+ </div>
+ </div>
+ <!-- /.content-header -->
+
+ <!-- Main content -->
+ <div class="app-content">
+ <div class="container-fluid">
+ <?php echo $this->yieldContent('content'); ?>
+ </div><!-- /.container-fluid -->
+ </div>
+ <!-- /.content -->
+ </main>
+ <!-- /.content-wrapper -->
+
+ <footer class="app-footer">
+ <strong>Copyright &copy; <?php echo \htmlentities(date('Y')??'', ENT_QUOTES, 'UTF-8', false); ?> <a href="#">SDN Demakijo 1</a>.</strong>
+ All rights reserved.
+ <div class="float-end d-none d-sm-inline-block">
+ <b>Version</b> 1.0.0
+ </div>
+ </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+<!-- Bootstrap 5 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-alpha2/dist/js/adminlte.min.js"></script>
+
+<?php echo  $this->CompileStackFinal('scripts'); ?>
+</body>
+</html>

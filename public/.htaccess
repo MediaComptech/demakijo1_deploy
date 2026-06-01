@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Mencegah browsing direktori secara langsung
+    Options -Indexes
+
+    # Mengarahkan request jika file atau direktori fisik tidak ditemukan
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?$1 [QSA,L]
+</IfModule>
