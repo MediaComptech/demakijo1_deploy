@@ -1,0 +1,24 @@
+{
+  "name": "SDN Demakijo 1 Gamping Sleman",
+  "short_name": "SDN Demakijo 1",
+  "description": "Aplikasi Web Resmi SDN Demakijo 1 Gamping Sleman",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#004aad",
+  "theme_color": "#004aad",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}

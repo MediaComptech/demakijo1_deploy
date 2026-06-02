@@ -2,11 +2,17 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     @php $siteConfig = \App\Models\SettingWebsite::first(); @endphp
     <title>{{ $title ?? ($siteConfig->nama_sekolah ?? 'SDN Demakijo 1') }} - Smart School</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#004aad">
+    
+    <!-- Apple Mobile Web App / iOS support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SDN Demakijo 1">
+    <link rel="apple-touch-icon" href="/logo-192.png">
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -166,6 +172,48 @@
             bottom: 0; left: 50%; transform: translateX(-50%);
             width: 80px; height: 4px; border-radius: 2px;
             background-color: var(--secondary);
+        }
+
+        /* Mobile and Safe Area Optimization */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .navbar.sticky-top {
+                padding-top: calc(15px + env(safe-area-inset-top));
+            }
+        }
+        
+        .floating-wa {
+            bottom: calc(30px + env(safe-area-inset-bottom));
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 12px;
+                margin-top: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            }
+            .nav-link {
+                padding: 10px 0;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .nav-item:last-child .nav-link {
+                border-bottom: none;
+            }
+            .dropdown-menu {
+                box-shadow: none;
+                padding-left: 15px;
+                background-color: #f8fafc;
+                border: 1px solid #e2e8f0;
+            }
+            .nav-item.ms-lg-3 {
+                margin-top: 15px;
+                width: 100%;
+            }
+            .nav-item.ms-lg-3 .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         {{ $custom_css ?? '' }}
