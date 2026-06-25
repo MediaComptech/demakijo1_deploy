@@ -6,6 +6,12 @@ use App\Core\Auth;
 
 class NotifikasiController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
+
     public function index()
     {
         return view("backend.notifikasi.index");
@@ -24,7 +30,7 @@ class NotifikasiController extends Controller
 
         // Also save to a log file for reference
         $log = [
-            "sent_at" => now()->toDateTimeString(),
+            "sent_at" => now(),
             "title"   => $request->title,
             "body"    => $request->body,
             "url"     => $request->url ?? "/",

@@ -8,6 +8,11 @@ use Illuminate\Support\Str;
 
 class KategoriBeritaController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
     public function index() {
         $data = KategoriBerita::withCount("beritas")->latest()->get();
         return view("backend.kategori_berita.index", compact("data"));

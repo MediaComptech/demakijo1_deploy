@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Storage;
 
 class PpdbController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
+
     public function index()
     {
         $data = Ppdb::latest()->get();

@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Cache;
 
 class AlumniController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
     public function index() {
         $data = Alumni::latest()->get();
         return view("backend.alumni.index", compact("data"));

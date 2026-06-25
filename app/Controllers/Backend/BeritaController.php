@@ -34,7 +34,7 @@ class BeritaController extends Controller
     {
         $input          = $request->except('_token');
         $input['slug']  = Str::slug($request->judul);
-        $input['user_id'] = auth()->id();
+        $input['user_id'] = Auth::user() ? Auth::user()->id : null;
         if (!isset($input['is_published'])) $input['is_published'] = false;
 
         if ($request->hasFile('gambar')) {

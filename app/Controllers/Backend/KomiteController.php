@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Cache;
 
 class KomiteController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
     public function index() {
         $data = Komite::orderBy("urutan")->get();
         return view("backend.komite.index", compact("data"));

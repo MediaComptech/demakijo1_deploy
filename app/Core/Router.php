@@ -66,6 +66,7 @@ class Router
 
                     // Action bisa berupa fungsi anonymous (closure) atau string Controller@method
                     if (is_callable($action)) {
+                        http_response_code(200);
                         call_user_func_array($action, $matches);
                         return;
                     }
@@ -94,6 +95,7 @@ class Router
                                     }
                                 }
                                 
+                                http_response_code(200);
                                 call_user_func_array([$instance, $function], $finalArgs);
                                 return;
                             }

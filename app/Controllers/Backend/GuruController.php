@@ -31,9 +31,6 @@ class GuruController extends Controller
     public function store(Request $request)
     {
         $input = $request->except('_token');
-        if (empty($input['slug'])) {
-            $input['slug'] = Str::slug($request->nama ?? $request->judul ?? (string)time());
-        }
         if ($request->hasFile('foto')) {
             $input['foto'] = $request->file('foto')->store('uploads', 'public');
         }
@@ -52,9 +49,6 @@ class GuruController extends Controller
     {
         $model = Guru::findOrFail($id);
         $input = $request->except('_token', '_method');
-        if (empty($input['slug'])) {
-            $input['slug'] = Str::slug($request->nama ?? $request->judul ?? (string)time());
-        }
         if ($request->hasFile('foto')) {
             if ($model->foto) Storage::disk('public')->delete($model->foto);
             $input['foto'] = $request->file('foto')->store('uploads', 'public');

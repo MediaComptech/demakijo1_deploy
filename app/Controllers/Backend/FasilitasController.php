@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Cache;
 
 class FasilitasController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
     public function index() {
         $data = \App\Models\Fasilitas::latest()->get();
         return view("backend." . strtolower(preg_replace("/(?<!^)[A-Z]/", "_$0", "Fasilitas")) . ".index", compact("data"));

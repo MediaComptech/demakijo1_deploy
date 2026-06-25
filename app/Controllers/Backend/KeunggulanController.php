@@ -9,6 +9,12 @@ use App\Core\Auth;
 
 class KeunggulanController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!Auth::check()) { redirect('/login'); }
+    }
+
     public function index()
     {
         $data = KeunggulanSekolah::orderBy('urutan')->get();
