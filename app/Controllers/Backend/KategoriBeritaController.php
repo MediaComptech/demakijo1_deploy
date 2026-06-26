@@ -24,7 +24,7 @@ class KategoriBeritaController extends Controller
         $request->validate(["nama" => "required"]);
         KategoriBerita::create([
             "nama" => $request->nama,
-            "slug" => Str::slug($request->nama),
+            "slug" => unique_slug($request->nama ?? '', \App\Models\KategoriBerita::class),
             "deskripsi" => $request->deskripsi,
         ]);
         redirect('/admin/kategori-berita')->with("success", "Kategori berhasil ditambahkan!");
@@ -38,7 +38,7 @@ class KategoriBeritaController extends Controller
         $request->validate(["nama" => "required"]);
         $kategori->update([
             "nama" => $request->nama,
-            "slug" => Str::slug($request->nama),
+            "slug" => unique_slug($request->nama ?? '', \App\Models\KategoriBerita::class, 'slug', $id),
             "deskripsi" => $request->deskripsi,
         ]);
         redirect('/admin/kategori-berita')->with("success", "Kategori berhasil diubah!");

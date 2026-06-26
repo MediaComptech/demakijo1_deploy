@@ -96,7 +96,31 @@ class Router
                                 }
                                 
                                 http_response_code(200);
-                                call_user_func_array([$instance, $function], $finalArgs);
+                                try {
+                                    call_user_func_array([$instance, $function], $finalArgs);
+                                } catch (\Illuminate\Database\QueryException $e) {
+                                    error_log('[DB ERROR] ' . $e->getMessage());
+                                    $msg = 'Terjadi kesalahan database.';
+                                    $errMsg = $e->getMessage();
+                                    if (str_contains($errMsg, 'Duplicate entry') || str_contains($errMsg, '1062')) {
+                                        $msg = 'Data sudah ada (duplikat). Periksa kembali inputan Anda.';
+                                    } elseif (str_contains($errMsg, 'cannot be null') || str_contains($errMsg, '1048')) {
+                                        $msg = 'Semua field wajib harus diisi dengan benar.';
+                                    } elseif (str_contains($errMsg, "doesn't have a default value") || str_contains($errMsg, '1364')) {
+                                        $msg = 'Beberapa field wajib belum diisi. Periksa kembali form Anda.';
+                                    } elseif (str_contains($errMsg, 'foreign key constraint') || str_contains($errMsg, '1452')) {
+                                        $msg = 'Data referensi tidak ditemukan. Pastikan kategori/relasi sudah ada.';
+                                    }
+                                    \App\Core\Session::setFlash('error', $msg);
+                                    $referer = $_SERVER['HTTP_REFERER'] ?? '/dashboard';
+                                    if (!headers_sent()) { header('Location: ' . $referer); exit; }
+                                } catch (\Throwable $e) {
+                                    error_log('[APP ERROR] ' . get_class($e) . ': ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+                                    \App\Core\Session::setFlash('error', 'Terjadi kesalahan sistem. Silakan coba lagi.');
+                                    $referer = $_SERVER['HTTP_REFERER'] ?? '/dashboard';
+                                    if (!headers_sent()) { header('Location: ' . $referer); exit; }
+                                }
+
                                 return;
                             }
                         }

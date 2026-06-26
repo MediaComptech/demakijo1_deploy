@@ -30,12 +30,11 @@ class PengumumanController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
-        if ($request->filled('judul')) $data['slug'] = Str::slug($request->judul);
-        if ($request->filled('nama'))  $data['slug'] = Str::slug($request->nama);
+        $data['slug']    = unique_slug($request->judul ?? $request->nama ?? '', \App\Models\Pengumuman::class);
+        $data['user_id'] = auth()->id() ?: 1; // fallback ke user pertama jika tidak ada di session
         if ($request->hasFile('file_lampiran')) {
             $data['file_lampiran'] = $request->file('file_lampiran')->store('dokumen', 'public');
         }
-        $data['user_id'] = auth()->id();
         Pengumuman::create($data);
         redirect('/admin/pengumuman')->with('success', 'Pengumuman berhasil ditambahkan');
     }
@@ -50,8 +49,7 @@ class PengumumanController extends Controller
     {
         $model = Pengumuman::findOrFail($id);
         $data  = $request->except('_token', '_method');
-        if ($request->filled('judul')) $data['slug'] = Str::slug($request->judul);
-        if ($request->filled('nama'))  $data['slug'] = Str::slug($request->nama);
+        $data['slug'] = unique_slug($request->judul ?? $request->nama ?? '', \App\Models\Pengumuman::class, 'slug', $id);
         if ($request->hasFile('file_lampiran')) {
             if ($model->file_lampiran) Storage::disk('public')->delete($model->file_lampiran);
             $data['file_lampiran'] = $request->file('file_lampiran')->store('dokumen', 'public');

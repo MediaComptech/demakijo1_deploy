@@ -23,11 +23,13 @@ class SiswaController extends Controller
         return view("backend.siswa.create");
     }
     public function store(Request $request) {
-        $input = $request->except("_token");
-        if ($request->hasFile("foto")) { $input["foto"] = $request->file("foto")->store("uploads", "public"); }
+        $input = $request->except('_token');
+        // Convert empty unique nullable fields to null to avoid unique constraint violation
+        if (isset($input['nisn']) && $input['nisn'] === '') $input['nisn'] = null;
+        if ($request->hasFile('foto')) { $input['foto'] = $request->file('foto')->store('uploads', 'public'); }
         \App\Models\Siswa::create($input);
-        Cache::forget("siswa_all");
-        redirect('/admin/siswa')->with("success", "Data berhasil ditambahkan");
+        Cache::forget('siswa_all');
+        redirect('/admin/siswa')->with('success', 'Data berhasil ditambahkan');
     }
     public function edit($id) {
         $data = \App\Models\Siswa::findOrFail($id);
@@ -35,11 +37,13 @@ class SiswaController extends Controller
     }
     public function update(Request $request, $id) {
         $model = \App\Models\Siswa::findOrFail($id);
-        $input = $request->except("_token", "_method");
-        if ($request->hasFile("foto")) { if ($model->foto) Storage::disk("public")->delete($model->foto); $input["foto"] = $request->file("foto")->store("uploads", "public"); }
+        $input = $request->except('_token', '_method');
+        // Convert empty unique nullable fields to null
+        if (isset($input['nisn']) && $input['nisn'] === '') $input['nisn'] = null;
+        if ($request->hasFile('foto')) { if ($model->foto) Storage::disk('public')->delete($model->foto); $input['foto'] = $request->file('foto')->store('uploads', 'public'); }
         $model->update($input);
-        Cache::forget("siswa_all");
-        redirect('/admin/siswa')->with("success", "Data berhasil diubah");
+        Cache::forget('siswa_all');
+        redirect('/admin/siswa')->with('success', 'Data berhasil diubah');
     }
     public function destroy($id) {
         $model = \App\Models\Siswa::findOrFail($id);

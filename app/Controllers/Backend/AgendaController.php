@@ -30,9 +30,7 @@ class AgendaController extends Controller
     public function store(Request $request)
     {
         $input = $request->except('_token');
-        if (empty($input['slug'])) {
-            $input['slug'] = Str::slug($request->judul ?? $request->nama ?? time());
-        }
+        $input['slug'] = unique_slug($request->judul ?? $request->nama ?? '', \App\Models\Agenda::class);
         Agenda::create($input);
         Cache::forget('agenda_all');
         redirect('/admin/agenda')->with('success', 'Agenda berhasil ditambahkan');
@@ -48,9 +46,7 @@ class AgendaController extends Controller
     {
         $model = Agenda::findOrFail($id);
         $input = $request->except('_token', '_method');
-        if (empty($input['slug'])) {
-            $input['slug'] = Str::slug($request->judul ?? $request->nama ?? time());
-        }
+        $input['slug'] = unique_slug($request->judul ?? $request->nama ?? '', \App\Models\Agenda::class, 'slug', $id);
         $model->update($input);
         Cache::forget('agenda_all');
         redirect('/admin/agenda')->with('success', 'Agenda berhasil diubah');

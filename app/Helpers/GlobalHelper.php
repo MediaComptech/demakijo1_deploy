@@ -246,3 +246,34 @@ if (!function_exists('config')) {
         return $config[$subkey] ?? $default;
     }
 }
+
+if (!function_exists('unique_slug')) {
+    /**
+     * Generate slug unik untuk model tertentu.
+     * Jika slug sudah ada, tambahkan sufiks -1, -2, dst.
+     *
+     * @param  string  $text       Teks sumber slug (misal: judul berita)
+     * @param  string  $modelClass Nama kelas model Eloquent (misal: \App\Models\Berita::class)
+     * @param  string  $column     Nama kolom slug di database (default: 'slug')
+     * @param  int|null $ignoreId  ID record yang diabaikan saat update (agar slug milik sendiri tidak dianggap duplikat)
+     * @return string
+     */
+    function unique_slug(string $text, string $modelClass, string $column = 'slug', $ignoreId = null): string
+    {
+        $slug = \Illuminate\Support\Str::slug($text);
+        if (empty($slug)) {
+            $slug = substr(md5(uniqid('', true)), 0, 8);
+        }
+        $original = $slug;
+        $i = 1;
+        while (
+            $modelClass::where($column, $slug)
+                ->when($ignoreId !== null, fn($q) => $q->where('id', '!=', $ignoreId))
+                ->exists()
+        ) {
+            $slug = $original . '-' . $i++;
+        }
+        return $slug;
+    }
+}
+

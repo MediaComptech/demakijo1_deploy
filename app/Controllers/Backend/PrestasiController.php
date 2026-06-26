@@ -23,12 +23,12 @@ class PrestasiController extends Controller
         return view("backend." . strtolower(preg_replace("/(?<!^)[A-Z]/", "_$0", "Prestasi")) . ".create");
     }
     public function store(Request $request) {
-        $input = $request->except("_token");
-        $input["slug"] = Str::slug($request->judul ?? $request->nama ?? $request->judul ?? time());
-        if ($request->hasFile("foto")) { $input["foto"] = $request->file("foto")->store("uploads", "public"); }
+        $input = $request->except('_token');
+        $input['slug'] = unique_slug($request->judul ?? $request->nama ?? '', \App\Models\Prestasi::class);
+        if ($request->hasFile('foto')) { $input['foto'] = $request->file('foto')->store('uploads', 'public'); }
         \App\Models\Prestasi::create($input);
-        Cache::forget("prestasi_all");
-        redirect('/admin/prestasi')->with("success", "Data berhasil ditambahkan");
+        Cache::forget('prestasi_all');
+        redirect('/admin/prestasi')->with('success', 'Data berhasil ditambahkan');
     }
     public function edit($id) {
         $data = \App\Models\Prestasi::findOrFail($id);
@@ -36,12 +36,12 @@ class PrestasiController extends Controller
     }
     public function update(Request $request, $id) {
         $model = \App\Models\Prestasi::findOrFail($id);
-        $input = $request->except("_token", "_method");
-        $input["slug"] = Str::slug($request->judul ?? $request->nama ?? $request->judul ?? time());
-        if ($request->hasFile("foto")) { if ($model->foto) Storage::disk("public")->delete($model->foto); $input["foto"] = $request->file("foto")->store("uploads", "public"); }
+        $input = $request->except('_token', '_method');
+        $input['slug'] = unique_slug($request->judul ?? $request->nama ?? '', \App\Models\Prestasi::class, 'slug', $id);
+        if ($request->hasFile('foto')) { if ($model->foto) Storage::disk('public')->delete($model->foto); $input['foto'] = $request->file('foto')->store('uploads', 'public'); }
         $model->update($input);
-        Cache::forget("prestasi_all");
-        redirect('/admin/prestasi')->with("success", "Data berhasil diubah");
+        Cache::forget('prestasi_all');
+        redirect('/admin/prestasi')->with('success', 'Data berhasil diubah');
     }
     public function destroy($id) {
         $model = \App\Models\Prestasi::findOrFail($id);

@@ -30,8 +30,8 @@ class AlbumController extends Controller
     public function store(Request $request)
     {
         $data = $request->except('_token');
-        if ($request->has('judul')) $data['slug'] = Str::slug($request->judul);
-        if ($request->has('nama'))  $data['slug'] = Str::slug($request->nama);
+        $titleField = $request->judul ?? $request->nama ?? '';
+        $data['slug'] = unique_slug($titleField, \App\Models\Album::class);
         if ($request->hasFile('cover')) {
             $data['cover'] = $request->file('cover')->store('uploads', 'public');
         }
@@ -49,8 +49,8 @@ class AlbumController extends Controller
     {
         $model = Album::findOrFail($id);
         $data  = $request->except('_token', '_method');
-        if ($request->has('judul')) $data['slug'] = Str::slug($request->judul);
-        if ($request->has('nama'))  $data['slug'] = Str::slug($request->nama);
+        $titleField = $request->judul ?? $request->nama ?? '';
+        $data['slug'] = unique_slug($titleField, \App\Models\Album::class, 'slug', $id);
         if ($request->hasFile('cover')) {
             if ($model->cover) Storage::disk('public')->delete($model->cover);
             $data['cover'] = $request->file('cover')->store('uploads', 'public');

@@ -24,7 +24,7 @@ class EkstrakurikulerController extends Controller
     }
     public function store(Request $request) {
         $input = $request->except("_token");
-        $input["slug"] = Str::slug($request->nama ?? $request->nama ?? $request->judul ?? time());
+        $input["slug"] = unique_slug($request->nama ?? $request->judul ?? '', \App\Models\Ekstrakurikuler::class);
         if ($request->hasFile("foto")) { $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         \App\Models\Ekstrakurikuler::create($input);
         Cache::forget("ekstra_all");
@@ -37,7 +37,7 @@ class EkstrakurikulerController extends Controller
     public function update(Request $request, $id) {
         $model = \App\Models\Ekstrakurikuler::findOrFail($id);
         $input = $request->except("_token", "_method");
-        $input["slug"] = Str::slug($request->nama ?? $request->nama ?? $request->judul ?? time());
+        $input["slug"] = unique_slug($request->nama ?? $request->judul ?? '', \App\Models\Ekstrakurikuler::class, 'slug', $id);
         if ($request->hasFile("foto")) { if ($model->foto) Storage::disk("public")->delete($model->foto); $input["foto"] = $request->file("foto")->store("uploads", "public"); }
         $model->update($input);
         Cache::forget("ekstra_all");

@@ -32,10 +32,10 @@ class BeritaController extends Controller
 
     public function store(Request $request)
     {
-        $input          = $request->except('_token');
-        $input['slug']  = Str::slug($request->judul);
+        $input            = $request->except('_token');
+        $input['slug']    = unique_slug($request->judul ?? '', \App\Models\Berita::class);
         $input['user_id'] = Auth::user() ? Auth::user()->id : null;
-        if (!isset($input['is_published'])) $input['is_published'] = false;
+        if (!isset($input['is_published'])) $input['is_published'] = 0;
 
         if ($request->hasFile('gambar')) {
             $input['gambar'] = $request->file('gambar')->store('uploads', 'public');
@@ -57,8 +57,8 @@ class BeritaController extends Controller
     {
         $model  = Berita::findOrFail($id);
         $input  = $request->except('_token', '_method');
-        $input['slug'] = Str::slug($request->judul);
-        if (!isset($input['is_published'])) $input['is_published'] = false;
+        $input['slug'] = unique_slug($request->judul ?? '', \App\Models\Berita::class, 'slug', $id);
+        if (!isset($input['is_published'])) $input['is_published'] = 0;
 
         if ($request->hasFile('gambar')) {
             if ($model->gambar) Storage::disk('public')->delete($model->gambar);
