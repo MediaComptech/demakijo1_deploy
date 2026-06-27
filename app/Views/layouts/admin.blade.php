@@ -255,13 +255,15 @@
 
                 {{-- ============================================================ --}}
                 {{-- FLASH MESSAGES — Ditampilkan inline di konten utama          --}}
-                {{-- View::render() sudah pass $flash_* dari Session::getFlash()  --}}
+                {{-- $flash_* diisi oleh View::render() via Session::getFlash()  --}}
                 {{-- ============================================================ --}}
                 @php
-                    $fSuccess = $flash_success ?? session('success');
-                    $fError = $flash_error ?? session('error');
-                    $fWarning = $flash_warning ?? session('warning');
-                    $fInfo = $flash_info ?? session('info');
+                    // $flash_* sudah diisi View::render(). Ambil ulang jika belum ada
+                    // (fallback untuk controller yang belum memanggil View::render secara langsung)
+                    $fSuccess = !empty($flash_success) ? $flash_success : \App\Core\Session::getFlash('success');
+                    $fError   = !empty($flash_error)   ? $flash_error   : \App\Core\Session::getFlash('error');
+                    $fWarning = !empty($flash_warning) ? $flash_warning : \App\Core\Session::getFlash('warning');
+                    $fInfo    = !empty($flash_info)    ? $flash_info    : \App\Core\Session::getFlash('info');
                 @endphp
 
                 @if(!empty($fSuccess))

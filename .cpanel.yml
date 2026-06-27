@@ -2,5 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/sdnc1967/public_html
+    - /bin/rm -rf $DEPLOYPATH/storage/cache
     - /bin/mkdir -p $DEPLOYPATH/storage/cache
     - /bin/chmod -R 755 $DEPLOYPATH/storage
+    - /bin/chmod -R 644 $DEPLOYPATH/storage/cache
